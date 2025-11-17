@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="ESP32 DevKitC V4 - Full GPIO" id="esp32-full">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <!-- ESP32 DevKitC V4 -->
+        <mxCell id="2" value="ESP32 DevKitC V4" style="shape=rectangle;rounded=1;fillColor=#A0C4FF;strokeColor=#000000;fontSize=14;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="100" y="50" width="300" height="500" as="geometry"/>
+        </mxCell>
+
+        <!-- Links: GPIOs 0-19 (Digitale Pins, ohne Eingänge nur) -->
+        <mxCell id="3" value="GPIO 0" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="10" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="GPIO 2" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="45" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="5" value="GPIO 4" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="80" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="6" value="GPIO 5" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="115" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="7" value="GPIO 12" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="150" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="8" value="GPIO 13" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="185" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="9" value="GPIO 14" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="220" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="10" value="GPIO 15" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="255" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="11" value="GPIO 16" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="290" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="12" value="GPIO 17" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="325" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="13" value="GPIO 18" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="360" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="14" value="GPIO 19" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="10" y="395" width="25" height="25" as="geometry"/>
+        </mxCell>
+
+        <!-- Rechts: GPIOs 21-39 -->
+        <mxCell id="15" value="GPIO 21" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="10" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="16" value="GPIO 22" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="45" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="17" value="GPIO 23" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="80" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="18" value="GPIO 25" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="115" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="19" value="GPIO 26" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="150" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="20" value="GPIO 27" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="185" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="21" value="GPIO 32" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="220" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="22" value="GPIO 33" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="255" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="23" value="GPIO 34" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="290" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="24" value="GPIO 35" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="325" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="25" value="GPIO 36" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="360" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="26" value="GPIO 39" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
+          <mxGeometry x="265" y="395" width="25" height="25" as="geometry"/>
+        </mxCell>
+
+        <!-- VCC und GND -->
+        <mxCell id="27" value="3V3" style="shape=ellipse;fillColor=#FFCC80;" vertex="1" parent="2">
+          <mxGeometry x="135" y="460" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="28" value="GND" style="shape=ellipse;fillColor=#FFCC80;" vertex="1" parent="2">
+          <mxGeometry x="190" y="460" width="25" height="25" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
