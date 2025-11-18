@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="DC-DC Step-Down Module" id="dc-dc-buck">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="600">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Main module rectangle -->
+        <mxCell id="2" value="DC-DC Step-Down (Buck) Module" style="shape=rectangle;rounded=1;fillColor=#FFD6A5;strokeColor=#000000;fontSize=14;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="300" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- Input pins -->
+        <mxCell id="3" value="VIN +" style="shape=ellipse;fillColor=#FFABAB;fontSize=12;" vertex="1" parent="2">
+          <mxGeometry x="10" y="10" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="GND" style="shape=ellipse;fillColor=#FFABAB;fontSize=12;" vertex="1" parent="2">
+          <mxGeometry x="10" y="50" width="25" height="25" as="geometry"/>
+        </mxCell>
+
+        <!-- Optional Enable pin -->
+        <mxCell id="5" value="EN" style="shape=ellipse;fillColor=#FFD680;fontSize=12;" vertex="1" parent="2">
+          <mxGeometry x="10" y="90" width="25" height="25" as="geometry"/>
+        </mxCell>
+
+        <!-- Output pins -->
+        <mxCell id="6" value="VOUT +" style="shape=ellipse;fillColor=#80FF80;fontSize=12;" vertex="1" parent="2">
+          <mxGeometry x="265" y="30" width="25" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="7" value="GND" style="shape=ellipse;fillColor=#80FF80;fontSize=12;" vertex="1" parent="2">
+          <mxGeometry x="265" y="70" width="25" height="25" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

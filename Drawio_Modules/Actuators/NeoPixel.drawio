@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mxfile host="app.diagrams.net">
-  <diagram name="NeoPixel" id="neopixel">
+  <diagram name="NeoPixel" id="ds18b20-bottom">
     <mxGraphModel dx="600" dy="400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100">
       <root>
         <mxCell id="0"/>
@@ -10,15 +10,15 @@
           <mxGeometry x="100" y="100" width="150" height="80" as="geometry"/>
         </mxCell>
 
-        <!-- Pins -->
-        <mxCell id="3" value="VCC (5V)" style="shape=ellipse;fillColor=#FFCC80;" vertex="1" parent="2">
-          <mxGeometry x="10" y="55" width="25" height="25" as="geometry"/>
+        <!-- Alle Pins unten -->
+        <mxCell id="3" value="VCC" style="shape=ellipse;fillColor=#FFCC80;" vertex="1" parent="2">
+          <mxGeometry x="10" y="50" width="25" height="25" as="geometry"/>
         </mxCell>
         <mxCell id="4" value="GND" style="shape=ellipse;fillColor=#FFCC80;" vertex="1" parent="2">
-          <mxGeometry x="60" y="55" width="25" height="25" as="geometry"/>
+          <mxGeometry x="60" y="50" width="25" height="25" as="geometry"/>
         </mxCell>
         <mxCell id="5" value="DIN (Data)" style="shape=ellipse;fillColor=#FFD6A5;" vertex="1" parent="2">
-          <mxGeometry x="110" y="55" width="25" height="25" as="geometry"/>
+          <mxGeometry x="110" y="50" width="25" height="25" as="geometry"/>
         </mxCell>
 
       </root>
