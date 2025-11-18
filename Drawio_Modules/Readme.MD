@@ -9,7 +9,8 @@ This library contains reusable Draw.io files for creating electronic schematics.
 Drawio_Modules/  
 ├── ESP32/  
 ├── Sensors/  
-├── Actuators/  
+├── Actuators/ 
+├── Generic Component/ 
 └── README.md  
 ```
 ### **ESP32/**
