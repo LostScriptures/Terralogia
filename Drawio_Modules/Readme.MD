@@ -46,10 +46,3 @@ Examples:
 2. **Copying into new schematics:**  
    Modules can be directly copied into existing schematics and connected.
 
-3. **Naming Convention:**  
-   All files are named by **module type and board/sensor name** (`<ModuleType>_<Name>.drawio`) for quick reference and versioning.
-
-4. **Versioning:**  
-   Updates or new versions of modules should include a suffix, e.g., `_v2`, to prevent confusion.
-
----
