@@ -21,8 +21,8 @@ class Pump{
 
 
     void update(){
-        if(is_running && (millies() - start_time >= stop_time)){
-            ledcWrite(pwmChannel, 0);
+        if(is_running && (millis() - start_time >= stop_time)){
+            ledcWrite(pwm_channel, 0);
             is_running = false;
         }
     }
@@ -30,7 +30,7 @@ class Pump{
 
     bool pump(float ml){
         if (is_running) return false;
-        stop_time = ml / volume_per_second * 1000;
+        stop_time = (ml / volume_per_second) * 1000.0f;
         start_time = millis();
         is_running = true;
         ledcWrite(pwm_channel, 128);//resulution muss angepasst werden um den entsprechenden ml per second zu bekommen.
@@ -57,20 +57,22 @@ class Pump{
 ## zu nutzen 
 ```cpp
 
+// ---- Pumpen-Objekt global anlegen ----
+Pump p1(1, 10000, 7, 2, 20000);
+
 void setup() {
-
-    Pump p1(1, 10000, 7, 2, 20000)
-
+    // setup bleibt leer, Konstruktor wurde bereits oben ausgeführt
 }
 
 void loop() {
+    // Pumpe stoppen wenn Zeit vorbei
     if (p1.runns()) {
         p1.update();
-    } 
-    
-    if(/*pumpe soll angehen*/){
-        p1.pump(150);
     }
 
+    // Beispielbedingung: Pumpe starten
+    if (/* pumpe soll angehen */ false) {
+        p1.pump(150);   // 150 ml pumpen
+    }
 }
 ```
