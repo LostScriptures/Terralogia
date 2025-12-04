@@ -82,7 +82,7 @@ UPPER_SNAKE_CASE
 
 ## 9. Dokumentation
 
-* Rustdoc-Kommentare (`///`):
+* doc-Kommentare (`///`):
 * Modulkommentare (`//!`):
 * Beispielcode:
 ```
@@ -103,8 +103,7 @@ foo()
 
 * Unit-Tests:
 * Integration-Tests:
-* Mocking:
-* Testnamenskonventionen:
+* Mocking:
 
 ---
 
@@ -118,8 +117,7 @@ foo()
 ---
 
 ## 13. Sicherheit
-
-* Umgang mit `unsafe`:
+
 * Input-Validierung:
 * Logging sensibler Daten:
 
