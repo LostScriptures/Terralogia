@@ -183,14 +183,37 @@ Du brauchst:
 Du startest den Sketch → wählst PWM → startest → misst → gibst ml ein.
 
 ```cpp
+#include <Arduino.h>
 int pumpPin = 23;
 int channel = 0;
 int resolution = 8;
 int freq = 20000;
 
+
 unsigned long startTime;
 int testPWM;
 bool measuring = false;
+
+int measuredPointCount = 0;
+int measuredMaxPoints = 3;
+float measuredPoints[3][2] = {
+    // {PWM, ml/s}
+    {-1,  -1},
+    {-1,  -1},
+    {-1,  -1}
+};
+enum State {
+    WAIT_FOR_PWM,
+    WAIT_FOR_ML
+};
+State currentState = WAIT_FOR_PWM;
+
+ struct dataswap
+ {
+        float a;
+        float b;
+ };
+ 
 
 void setup() {
     Serial.begin(115200);
@@ -198,6 +221,7 @@ void setup() {
     ledcSetup(channel, freq, resolution);
     ledcAttachPin(pumpPin, channel);
 
+    currentState = WAIT_FOR_PWM;
     Serial.println("Kalibrierung gestartet.");
     Serial.println("Bitte gib einen PWM-Wert ein (0–255):");
 }
@@ -205,63 +229,68 @@ void setup() {
 void loop() {
 
     // ---------------------------
-    // 1. PWM-Wert einlesen
-    // ---------------------------
-    if (Serial.available() && !measuring) {
+    if (Serial.available()) {
 
         String input = Serial.readStringUntil('\n');
-        testPWM = input.toInt();
+        input.trim();
+        
+        bool punktgefunden = false;
+        bool isNumber = true;
+        for (size_t i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
 
-        if (testPWM < 0 || testPWM > 255) {
-            Serial.println("Ungültig. Bitte 0–255 eingeben:");
+            if(isDigit(c)) {
+                continue;
+            }
+            if(c == '.' && !punktgefunden){
+                punktgefunden = true;
+                continue;
+            }
+            isNumber = false;
+            break;
+        }
+
+        if(!isNumber|| input.length() == 0) {
+            Serial.println("Ungültige Eingabe. Bitte eine Zahl eingeben:");
             return;
         }
 
-        Serial.println("Messung läuft automatisch für 10 Sekunden...");
-        Serial.println("Bitte stelle nach Ablauf die gemessenen ml bereit.");
-        Serial.println("");
-
-        measuring = true;
-        startTime = millis();
-
-        // Pumpe starten
-        ledcWrite(channel, testPWM);
-    }
-
-    // ---------------------------
-    // 2. Automatisches Stoppen nach 10 Sekunden
-    // ---------------------------
-    if (measuring && (millis() - startTime >= 10000)) {
-
-        ledcWrite(channel, 0);  // Pumpe aus
-        measuring = false;
-
-        Serial.println("Messung beendet. Bitte gemessene ml eingeben:");
-    }
-
-    // ---------------------------
-    // 3. Gemessene ML einlesen
-    // ---------------------------
-    if (Serial.available() && !measuring) {
-
-        String input = Serial.readStringUntil('\n');
-        float ml = input.toFloat();
-
-        if (ml <= 0) {
-            Serial.println("Ungültige ml! Bitte erneut eingeben:");
+        if(currentState == State::WAIT_FOR_PWM && isNumber) {
+            testPWM = input.toInt();
+            if (testPWM < 0 || testPWM > 255) {
+                Serial.println("Ungültig. Bitte 0–255 eingeben:");
+                return;
+            }
+            measuredPoints[measuredPointCount][0] = testPWM;
+            Serial.println("Pumpe läuft mit PWM " + String(testPWM) + ". Messung läuft automatisch für 10 Sekunden...");
+            ledcWrite(channel, testPWM);
+            delay(10000);
+            ledcWrite(channel, 0); 
+            currentState = State::WAIT_FOR_ML;
+            Serial.println("Bitte gib die gemessene Menge in ml ein");
             return;
         }
 
-        float seconds = 10.0f;
-        float ml_per_s = ml / seconds;
+        if(currentState == State::WAIT_FOR_ML && isNumber) {
+            float ml = input.toFloat();
+            measuredPoints[measuredPointCount][1] = ml / 10; // ml/s
+            Serial.println("Gemessen: " + String(ml) + " ml in 10.0 s → ml/s = " + String(measuredPoints[measuredPointCount][1]));
+            measuredPointCount++;
+            if(measuredPointCount >= measuredMaxPoints) {
+                Serial.println("Kalibrierung abgeschlossen.");
+                while(true) {
+                    Serial.println("Gemessene Kalibrierungspunkte (PWM, ml/s):");
+                    for(int i = 0; i < measuredMaxPoints ; i++) {
+                        Serial.println("PWM: " + String(measuredPoints[i][0]) + ", ml/s: " + String(measuredPoints[i][1]));
+                    }
+                    delay(1000);
+                }
+            } else {
+                currentState = State::WAIT_FOR_PWM;
+                Serial.println("Bitte gib nächsten PWM-Wert ein (0–255):");
+            }
+        }
 
-        Serial.println("-------------------------------------------------");
-        Serial.println("PWM: " + String(testPWM));
-        Serial.println("Gemessen: " + String(ml) + " ml in 10.0 s");
-        Serial.println("→ ml/s = " + String(ml_per_s));
-        Serial.println("-------------------------------------------------");
-        Serial.println("");
-        Serial.println("Gib nächsten PWM-Wert ein (0–255):");
     }
 }
 ```
