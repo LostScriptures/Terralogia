@@ -1,9 +1,15 @@
 #include <iostream>
 #include <thread>
+#include <queue>
+#include <vector>
 
-#include <Devices.cpp>
+#include "Devices.h"
+#include "DeviceManager.h"  
+#include "DataClasses.h"
 
-// Example
+using namespace std;
+
+// Dummy device for testing
 class Dummy : public Device {
     uint32_t id;
 
@@ -22,7 +28,19 @@ public:
     };
 };
 
+void dm_thread(EventQueue in_queue, EventQueue out_queue) {
+    Device *d1 = new Dummy(1);
+    vector<unique_ptr<Device>> devices;
+    devices.push_back(unique_ptr<Device>(d1));
+
+    DeviceManager manager = DeviceManager(move(devices), move(in_queue), move(out_queue));
+}
+
 int main() {
-    thread t = thread();
+    EventQueue out_queue;
+    EventQueue in_queue;
+
+    thread DM = thread(dm_thread, out_queue, in_queue);
+
     return 0;
 }
