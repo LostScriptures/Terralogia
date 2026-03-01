@@ -15,6 +15,7 @@ public:
     void push(const T& v) {
         std::lock_guard lk(mtx);
         queue.push(v);
+        
         cv.notify_one();
     }
     T wait_and_pop() {

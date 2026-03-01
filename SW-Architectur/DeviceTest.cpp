@@ -9,33 +9,39 @@
 
 using namespace std;
 
-void dm_thread(EventQueue& in_queue, EventQueue& out_queue, DeviceManager* manager) {
+void dm_thread(DeviceManager* manager) {
     while (true) {
-        EventWrapper wraped_event = in_queue.wait_and_pop();
-        Event event = wraped_event.event;
-
-        manager->handleEvent(event);
+        manager->handleEvent();
     }
 }
 
 int main() {
+    // Create event queues
     EventQueue out_queue(CompareEvent{});
     EventQueue in_queue(CompareEvent{});
     
+    // Create test device and device manager
     Device *d1 = new Dummy(1);
     vector<unique_ptr<Device>> devices;
     devices.push_back(unique_ptr<Device>(d1));
     
-    DeviceManager manager(move(devices), in_queue, out_queue);
+    DeviceManager manager(move(devices), out_queue, in_queue);
 
-    thread DM(dm_thread, ref(in_queue), ref(out_queue), &manager);
+    // Start device manager thread
+    thread DM(dm_thread, &manager);
     
-    EventWrapper e = EventFactory::createEvent(DeviceType::DUMMY, 1, Command::ON);
-    in_queue.push(e);
+    cout << "Device Manager thread started\n";
 
-    printf("Event pushed to queue\n");
+    // Create and push test event
+    EventWrapper e = EventFactory::createEvent(DeviceType::DUMMY, 1, Command::ON, 12);
+    out_queue.push(e);
+
+    cout << "Event pushed to queue\n";
     
-    DM.join();  // Wait for thread to complete
+    Event result = in_queue.wait_and_pop().unwrap();
+    cout << "Event processed with state: " << result.state << "\n";
+    cout << "Event start time: " << result.start_time.count() << " ms\n";
+    cout << "Event end time: " << result.end_time.count() << " ms\n";
     
     return 0;
 }

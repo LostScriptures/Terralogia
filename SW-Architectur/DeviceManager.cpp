@@ -12,10 +12,19 @@ DeviceManager::DeviceManager(vector<unique_ptr<Device>>&& devs, EventQueue& in_q
     : devices(move(devs)), in_queue(&in_queue), out_queue(&out_queue) {};
 
 
-void DeviceManager::handleEvent(const Event& event) {
+void DeviceManager::handleEvent() {
+    Event event = this->in_queue->wait_and_pop().unwrap();
+
     for (auto& d : devices) {
         if (d->getType() == event.type && (event.targetId == 0 || d->getId() == event.targetId)) {
-            d->update(event);
+            event.start_time = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
+
+            State result = d->update(event);
+            event.state = result;
+            
+            event.end_time = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
+            
+            this->out_queue->push(EventFactory::createEvent(event));
         }
     }
 }

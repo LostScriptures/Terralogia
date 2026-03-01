@@ -28,5 +28,5 @@ public:
     explicit DeviceManager(std::vector<std::unique_ptr<Device>>&& devs,
                            EventQueue& in_queue,
                            EventQueue& out_queue);
-    void handleEvent(const Event& event);
+    void handleEvent();
 };
