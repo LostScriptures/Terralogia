@@ -9,38 +9,33 @@
 
 using namespace std;
 
-// Dummy device for testing
-class Dummy : public Device {
-    uint32_t id;
+void dm_thread(EventQueue& in_queue, EventQueue& out_queue, DeviceManager* manager) {
+    while (true) {
+        EventWrapper wraped_event = in_queue.wait_and_pop();
+        Event event = wraped_event.event;
 
-public:
-    Dummy(uint32_t id) : id(id) {}
-    
-    DeviceType getType() const override {
-        return DeviceType::DUMMY;
+        manager->handleEvent(event);
     }
-
-    uint32_t getId() const override {
-        return id;
-    }
-    void update(const Event& task) override {
-        cout << "ID: " << task.targetId << "\nCOM: " << task.command << "\nVAL: " << task.value;
-    };
-};
-
-void dm_thread(EventQueue in_queue, EventQueue out_queue) {
-    Device *d1 = new Dummy(1);
-    vector<unique_ptr<Device>> devices;
-    devices.push_back(unique_ptr<Device>(d1));
-
-    DeviceManager manager = DeviceManager(move(devices), move(in_queue), move(out_queue));
 }
 
 int main() {
-    EventQueue out_queue;
-    EventQueue in_queue;
+    EventQueue out_queue(CompareEvent{});
+    EventQueue in_queue(CompareEvent{});
+    
+    Device *d1 = new Dummy(1);
+    vector<unique_ptr<Device>> devices;
+    devices.push_back(unique_ptr<Device>(d1));
+    
+    DeviceManager manager(move(devices), in_queue, out_queue);
 
-    thread DM = thread(dm_thread, out_queue, in_queue);
+    thread DM(dm_thread, ref(in_queue), ref(out_queue), &manager);
+    
+    EventWrapper e = EventFactory::createEvent(DeviceType::DUMMY, 1, Command::ON);
+    in_queue.push(e);
 
+    printf("Event pushed to queue\n");
+    
+    DM.join();  // Wait for thread to complete
+    
     return 0;
 }

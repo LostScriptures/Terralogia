@@ -22,11 +22,11 @@ private:
     std::vector<std::unique_ptr<Device>> devices;
 
 public:
-    EventQueue in_queue;  // Rx
-    EventQueue out_queue; // Tx
+    EventQueue* in_queue;
+    EventQueue* out_queue;
 
     explicit DeviceManager(std::vector<std::unique_ptr<Device>>&& devs,
-                           EventQueue&& in_queue,
-                           EventQueue&& out_queue);
+                           EventQueue& in_queue,
+                           EventQueue& out_queue);
     void handleEvent(const Event& event);
 };

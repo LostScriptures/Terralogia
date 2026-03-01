@@ -11,20 +11,26 @@ public:
     virtual ~Device() = default;
 };
 
+
 class Lights : public Device {
     uint32_t id;
 
 public:
     Lights(uint32_t id) : id(id) {}
     
-    DeviceType getType() const override {
-        return DeviceType::LIGHT;
-    }
+    DeviceType getType() const override;
+    uint32_t getId() const override;
+    void update(const Event& task) override;
+};
 
-    uint32_t getId() const override {
-        return id;
-    }
-    void update(const Event& task) override {
-        /* Event Handling */
-    };
+// Dummy device for testing
+class Dummy : public Device {
+    uint32_t id;
+
+public:
+    Dummy(uint32_t id) : id(id) {}
+    
+    DeviceType getType() const override;
+    uint32_t getId() const override;
+    void update(const Event& task) override;
 };
