@@ -6,7 +6,7 @@
 template<typename T, typename Compare>
 class ThreadSafePriorityQueue {
     std::priority_queue<T, std::vector<T>, Compare> queue;
-    std::mutex mtx;
+    mutable std::mutex mtx;
     std::condition_variable cv;
 public:
     explicit ThreadSafePriorityQueue(Compare cmp = Compare{})

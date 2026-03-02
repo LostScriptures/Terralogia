@@ -6,7 +6,8 @@ enum DeviceType {
     LIGHT,
     PUMP,
     FAN,
-    DUMMY
+    DUMMY,
+    MANAGER
 };
 
 enum Command {
@@ -47,7 +48,7 @@ public:
     static EventWrapper createEvent(Event e, int priority = 1) {
         return EventWrapper{priority, e};
     };
-    static EventWrapper createEvent(DeviceType type, uint32_t targetId, Command command, int32_t value = 0, State state = State::WORKING, int priority = 1) {
+    static EventWrapper createEvent(DeviceType type, uint32_t targetId, Command command, int32_t value = 0, int priority = 1, State state = State::WORKING) {
         Event e = Event{type, targetId, state, command, value};
         return EventWrapper{priority, e};
     };
