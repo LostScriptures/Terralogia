@@ -2,9 +2,12 @@
 #include <memory>
 #include <queue>
 
-#include "Devices.h"
-#include "DeviceManager.h"
-#include "TS_PriorityQueue.h"
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
+
+#include "../lib/DataClasses.h"
+#include "../lib/DeviceManager.h"
+#include "../lib/TS_PriorityQueue.h"
 
 using namespace std;
 
@@ -13,12 +16,17 @@ DeviceManager::DeviceManager(vector<unique_ptr<Device>>&& devs, EventQueue& in_q
 
 
 void DeviceManager::handleEvent() {
-    Event event = this->in_queue->wait_and_pop().unwrap();
-
+    EventWrapper wrapped_event;
+    this->in_queue->pop(wrapped_event, portMAX_DELAY);
+    Event event = wrapped_event.unwrap();
+    
     if (event.type == DeviceType::MANAGER) {
         if (event.command == Command::OFF) {
-            this->out_queue->push(EventFactory::createEvent(DeviceType::MANAGER, 0, Command::OFF, 0, 0, State::DONE));
-            exit(0);
+            this->out_queue->push(
+                EventFactory::createEvent(DeviceType::MANAGER, 0, Command::OFF, 0, 0, State::DONE),
+                portMAX_DELAY
+            );
+            vTaskDelete(NULL);
         }
     }
 
@@ -31,7 +39,7 @@ void DeviceManager::handleEvent() {
             
             event.end_time = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
             
-            this->out_queue->push(EventFactory::createEvent(event));
+            this->out_queue->push(EventFactory::createEvent(event), portMAX_DELAY);
         }
     }
 }

@@ -2,11 +2,12 @@
 #include <stdint.h>
 #include <chrono>
 
+
 enum DeviceType {
     LIGHT,
     PUMP,
     FAN,
-    DUMMY,
+    LED,
     MANAGER
 };
 

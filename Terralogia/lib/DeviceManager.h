@@ -15,7 +15,7 @@ struct CompareEvent {
 };
 
 // Typedef / alias for convenience
-using EventQueue = ThreadSafePriorityQueue<EventWrapper, CompareEvent>;
+using EventQueue = RTOSPriorityQueue<EventWrapper, 3, 10>;
 
 class DeviceManager {
 private:
