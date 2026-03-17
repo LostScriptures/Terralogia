@@ -21,11 +21,11 @@ typedef struct Queues {
 void DeviceManagerTask(void* pvParameters) {
     Queues* queues = static_cast<Queues*>(pvParameters);
 
-    Led led1(1, GPIO_NUM_15);
+    NEOPixel pixel(1, 3, GPIO_NUM_13);
 
     // Create devices
     std::vector<std::unique_ptr<Device>> devices;
-    devices.push_back(std::make_unique<Led>(led1));
+    devices.push_back(std::make_unique<NEOPixel>(pixel));
 
     // Create device manager
     DeviceManager manager(
@@ -39,34 +39,41 @@ void DeviceManagerTask(void* pvParameters) {
         manager.handleEvent();
     }
 }
-Queues setup() {
+Queues queue_setup() {
     Queues queues;
     xTaskCreatePinnedToCore(DeviceManagerTask, "DeviceManagerTask", 4096, &queues, 1, NULL, 1);
     return queues;
 }
 extern "C" void app_main() {
     vTaskDelay(1000 / portTICK_PERIOD_MS);
-    Queues queues = setup();
-    EventWrapper wrapped_event1;
-    EventWrapper wrapped_event2;
-    Event e1;
-    Event e2;
+    Queues queues = queue_setup();
+    EventWrapper wrapped_event;
+    Event e;
 
     while (1) {
-        queues.out_queue.push(EventFactory::createEvent(DeviceType::LED, 1, Command::ON), 0);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        queues.out_queue.push(EventFactory::createEvent(
+            DeviceType::NEOPIXEL,
+            1,
+            Command::COLOR,
+            COLORS::toInt(COLORS::gamma_scale({55, 205, 252}, 0.5))
+        ), 1);
+        queues.out_queue.push(EventFactory::createEvent(
+            DeviceType::NEOPIXEL,
+            1,
+            Command::COLOR,
+            COLORS::toInt(COLORS::gamma_scale({255, 255, 255}, 0.5), 1)
+        ), 1);
+        queues.out_queue.push(EventFactory::createEvent(
+            DeviceType::NEOPIXEL,
+            1,
+            Command::COLOR,
+            COLORS::toInt(COLORS::gamma_scale({247, 168, 184}, 0.5), 2)
+        ), 1);
+        vTaskDelay(35 / portTICK_PERIOD_MS);
         
-        queues.in_queue.pop(wrapped_event1, portMAX_DELAY);
-        e1 = wrapped_event1.unwrap();
-
-        ESP_LOGI(TAG, "Received event for device: %d of type: %d with command: %d and status: %d", e1.targetId, e1.type, e1.command, e1.state);
-
-        queues.out_queue.push(EventFactory::createEvent(DeviceType::LED, 1, Command::OFF), 0);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-        queues.in_queue.pop(wrapped_event2, portMAX_DELAY);
-        e2 = wrapped_event2.unwrap();
-
-        ESP_LOGI(TAG, "Received event for device: %d of type: %d with command: %d and status: %d", e2.targetId, e2.type, e2.command, e2.state);
+        queues.in_queue.pop(wrapped_event, portMAX_DELAY);
+        e = wrapped_event.unwrap();
+        
+        // ESP_LOGI(TAG, "Received event for device: %d of type: %d with command: %d and status: %d", e.targetId, e.type, e.command, e.state);
     }
 }

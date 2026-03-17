@@ -30,10 +30,13 @@ void DeviceManager::handleEvent() {
         }
     }
 
+    // TODO: Device manager notices broadcast event, takes device count and waits for all devices to complete
+    // then sends single DONE Event back 
+
     for (auto& d : devices) {
         if (d->getType() == event.type && (event.targetId == 0 || d->getId() == event.targetId)) {
             event.start_time = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
-
+            
             State result = d->update(event);
             event.state = result;
             

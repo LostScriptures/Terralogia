@@ -1,8 +1,11 @@
 #pragma once
 #include <cstdint>
 
-#include <driver/gpio.h>
-#include <freertos/FreeRTOS.h>
+extern "C" {
+    #include "../components/led_strip/include/led_strip.h"
+    #include <driver/gpio.h>
+    #include <freertos/FreeRTOS.h>
+}
 
 #include "DataClasses.h"
 
@@ -35,6 +38,7 @@ public:
 class Led : public Device {
 protected:
     gpio_num_t LED_PIN;
+    int LED_STATE = 0; // 0 for off, 1 for on
 
 public:
     Led(uint32_t id, gpio_num_t LED_PIN) : Device(id), LED_PIN(LED_PIN) {
@@ -48,9 +52,7 @@ public:
 
         gpio_config(&io_conf);
 
-        gpio_set_level(LED_PIN, 1); // Ensure LED is off initially
-        vTaskDelay(500 / portTICK_PERIOD_MS); // Short delay to ensure the pin is set before turning it off
-        gpio_set_level(LED_PIN, 0); // Ensure LED is off initially
+        gpio_set_level(LED_PIN, LED_STATE); // Ensure LED is off initially
     }
 
     DeviceType getType() const override {
@@ -61,4 +63,40 @@ public:
         gpio_set_level(LED_PIN, 0); // Ensure LED is off when destroyed
         gpio_reset_pin(LED_PIN); 
     }
+};
+
+class NEOPixel : public Device {
+protected:
+    uint32_t id;
+    uint32_t length;
+    led_strip_handle_t strip;
+
+public:
+    NEOPixel(uint32_t id, uint32_t length, gpio_num_t NEOPIXEL_PIN) : Device(id), length(length) {
+        led_strip_config_t strip_config = {
+            .strip_gpio_num = NEOPIXEL_PIN,
+            .max_leds = length,
+            .led_model = LED_MODEL_WS2812,
+            .color_component_format = LED_STRIP_COLOR_COMPONENT_FMT_GRB,
+            .flags = {
+                .invert_out = false
+            }
+        };
+
+        led_strip_rmt_config_t rmt_config = {
+            .clk_src = RMT_CLK_SRC_DEFAULT,
+            .resolution_hz = 10 * 1000 * 1000,
+            .mem_block_symbols = 64,
+            .flags = {
+                .with_dma = false
+            }
+        };
+
+        led_strip_new_rmt_device(&strip_config, &rmt_config, &strip);
+    }
+
+    DeviceType getType() const override {
+        return DeviceType::NEOPIXEL;
+    };
+    State update(const Event& event) override;
 };
