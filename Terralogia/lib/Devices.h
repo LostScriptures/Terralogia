@@ -100,3 +100,4 @@ public:
     };
     State update(const Event& event) override;
 };
+

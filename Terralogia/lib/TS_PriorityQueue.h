@@ -2,6 +2,8 @@
 #include <freertos/queue.h>
 #include <freertos/semphr.h>
 
+#include <concepts>
+
 template<typename T, int PRIORITY_LEVELS, int QUEUE_LENGTH>
 requires requires(T t) { t.priority; }
 class RTOSPriorityQueue
@@ -25,14 +27,24 @@ public:
 
     bool push(const T& item, TickType_t timeout = 0)
     {
-        if(T.priority >= PRIORITY_LEVELS)
-            T.priority = PRIORITY_LEVELS - 1;
+        int actual_priority = -1;
 
-        if(T.priority < 0)
-            T.priority = 0;
+        if (item.priority >= PRIORITY_LEVELS) {
+            actual_priority = PRIORITY_LEVELS - 1;
+
+        } else if (item.priority < 0) {
+            actual_priority = 0;
+
+        } else if (actual_priority == -1) {
+            xSemaphoreTake(mutex, portMAX_DELAY);
+            bool ok = xQueueSend(queues[item.priority], &item, timeout) == pdTRUE;
+            xSemaphoreGive(mutex);
+    
+            return ok;
+        }
 
         xSemaphoreTake(mutex, portMAX_DELAY);
-        bool ok = xQueueSend(queues[T.priority], &item, timeout) == pdTRUE;
+        bool ok = xQueueSend(queues[item.priority], &item, timeout) == pdTRUE;
         xSemaphoreGive(mutex);
 
         return ok;

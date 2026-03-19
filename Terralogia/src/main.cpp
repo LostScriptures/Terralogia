@@ -55,20 +55,20 @@ extern "C" void app_main() {
             DeviceType::NEOPIXEL,
             1,
             Command::COLOR,
-            COLORS::toInt(COLORS::gamma_scale({55, 205, 252}, 0.5))
-        ), 1);
+            COLORS::toInt(COLORS::gamma_scale({55, 205, 252}, 0.3))
+        ));
         queues.out_queue.push(EventFactory::createEvent(
             DeviceType::NEOPIXEL,
             1,
             Command::COLOR,
-            COLORS::toInt(COLORS::gamma_scale({255, 255, 255}, 0.5), 1)
-        ), 1);
+            COLORS::toInt(COLORS::gamma_scale({255, 255, 255}, 0.3), 1)
+        ));
         queues.out_queue.push(EventFactory::createEvent(
             DeviceType::NEOPIXEL,
             1,
             Command::COLOR,
-            COLORS::toInt(COLORS::gamma_scale({247, 168, 184}, 0.5), 2)
-        ), 1);
+            COLORS::toInt(COLORS::gamma_scale({247, 168, 184}, 0.3), 2)
+        ));
         vTaskDelay(35 / portTICK_PERIOD_MS);
         
         queues.in_queue.pop(wrapped_event, portMAX_DELAY);
