@@ -2,7 +2,7 @@
 #include <cstdint>
 
 extern "C" {
-    #include "../components/led_strip/include/led_strip.h"
+    #include "led_strip.h"
     #include <driver/gpio.h>
     #include <freertos/FreeRTOS.h>
 }

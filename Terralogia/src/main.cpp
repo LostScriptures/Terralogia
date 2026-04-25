@@ -7,9 +7,9 @@ extern "C" {
 #include <memory>
 #include <vector>
 
-#include <../lib/Devices.h>
-#include <../lib/DeviceManager.h>
-#include <../lib/DataClasses.h>
+#include <Devices.h>
+#include <DeviceManager.h>
+#include <DataClasses.h>
 
 const char* TAG = "Main";
 

@@ -3,11 +3,11 @@
 #include <chrono>
 #include <format>
 
-#include "../lib/Devices.h"
-#include "../lib/DataClasses.h"
+#include "Devices.h"
+#include "DataClasses.h"
 
 extern "C" {
-    #include "../components/led_strip/include/led_strip.h"
+    #include "led_strip.h"
 }
 
 using namespace std;

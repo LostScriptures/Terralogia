@@ -5,9 +5,9 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
 
-#include "../lib/DataClasses.h"
-#include "../lib/DeviceManager.h"
-#include "../lib/TS_PriorityQueue.h"
+#include "DataClasses.h"
+#include "DeviceManager.h"
+#include "TS_PriorityQueue.h"
 
 using namespace std;
 

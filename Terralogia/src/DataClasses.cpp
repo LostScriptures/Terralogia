@@ -2,7 +2,7 @@
 #include <array>
 #include <cstdint>
 
-#include "../lib/DataClasses.h"
+#include "DataClasses.h"
 
 namespace COLORS {
     uint32_t toInt(const Color& c, uint8_t led)
