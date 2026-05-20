@@ -1,5 +1,5 @@
 #pragma once
-#include <queue>
+//#include <queue>
 #include <vector>
 #include <memory>
 
@@ -8,11 +8,12 @@
 #include "Devices.h"
 
 // Comparator for the priority queue
+/*
 struct CompareEvent {
     bool operator()(const EventWrapper& a, const EventWrapper& b) const {
         return a.priority > b.priority;
     }
-};
+};*/
 
 // Typedef / alias for convenience
 using EventQueue = RTOSPriorityQueue<EventWrapper, 3, 10>;
