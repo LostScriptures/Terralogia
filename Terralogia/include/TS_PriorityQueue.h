@@ -36,13 +36,7 @@ public:
         } else if (item.priority < 0) {
             actual_priority = 0;
 
-        } else if (actual_priority == -1) {
-            xSemaphoreTake(mutex, portMAX_DELAY);
-            bool ok = xQueueSend(queues[item.priority], &item, timeout) == pdTRUE;
-            xSemaphoreGive(mutex);
-    
-            return ok;
-        }
+        } 
 
         xSemaphoreTake(mutex, portMAX_DELAY);
         bool ok = xQueueSend(queues[item.priority], &item, timeout) == pdTRUE;
