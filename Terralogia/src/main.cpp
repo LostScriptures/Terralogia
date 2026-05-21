@@ -39,11 +39,13 @@ void DeviceManagerTask(void* pvParameters) {
         manager.handleEvent();
     }
 }
+
 Queues queue_setup() {
     Queues queues;
     xTaskCreatePinnedToCore(DeviceManagerTask, "DeviceManagerTask", 4096, &queues, 1, NULL, 1);
     return queues;
 }
+
 extern "C" void app_main() {
     vTaskDelay(1000 / portTICK_PERIOD_MS);
     Queues queues = queue_setup();
