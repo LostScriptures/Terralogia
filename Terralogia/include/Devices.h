@@ -4,7 +4,9 @@
 extern "C" {
     #include "led_strip.h"
     #include <driver/gpio.h>
+    #include <driver/ledc.h>  
     #include <freertos/FreeRTOS.h>
+    #include <freertos/task.h>
 }
 
 #include "DataClasses.h"
@@ -67,7 +69,6 @@ public:
 
 class NEOPixel : public Device {
 protected:
-    uint32_t id;
     uint32_t length;
     led_strip_handle_t strip;
 
@@ -101,3 +102,89 @@ public:
     State update(const Event& event) override;
 };
 
+struct Interpolation_Points {                   
+    int pwm;                                    
+    float ml_per_s;                             
+};                                              
+
+class Pump : public Device {                    
+public:                                         
+    Pump(uint32_t id,                           
+         gpio_num_t pwm_pin,                    
+         ledc_channel_t pwm_channel,            
+         ledc_timer_t pwm_timer,                
+         int pwm_frequency,                     
+         int pwm_resolution,                    
+         int min_pwm,                           
+         int max_pwm,                           
+         const Interpolation_Points* calib_data,
+         int calib_count,                       
+         EventQueue* out_queue)                 
+        : Device(id),                           
+          pwm_pin(pwm_pin),                     
+          pwm_channel(pwm_channel),             
+          pwm_timer(pwm_timer),                 
+          pwm_frequency(pwm_frequency),         
+          pwm_resolution(pwm_resolution),       
+          min_pwm(min_pwm),                     
+          max_pwm(max_pwm),                     
+          calib_data(calib_data),               
+          calib_count(calib_count),             
+          out_queue(out_queue),                 
+          is_running(false),                    
+          task_handle(nullptr),                 
+          pwm_current(0)                        
+    {                                           
+        ledc_timer_config_t timer_conf = {      
+            .speed_mode      = LEDC_LOW_SPEED_MODE,     
+            .duty_resolution = (ledc_timer_bit_t)pwm_resolution, 
+            .timer_num       = pwm_timer,       
+            .freq_hz         = (uint32_t)pwm_frequency, 
+            .clk_cfg         = LEDC_AUTO_CLK    
+        };                                      
+        ledc_timer_config(&timer_conf);         
+                                                
+        ledc_channel_config_t channel_conf = {  
+            .gpio_num   = pwm_pin,              
+            .speed_mode = LEDC_LOW_SPEED_MODE,  
+            .channel    = pwm_channel,          
+            .intr_type  = LEDC_INTR_DISABLE,    
+            .timer_sel  = pwm_timer,            
+            .duty       = 0,                    
+            .hpoint     = 0                     
+        };                                      
+        ledc_channel_config(&channel_conf);     
+    }                                           
+                                                
+    DeviceType getType() const override {       
+        return DeviceType::PUMP;                
+    }                                           
+                                                
+    State update(const Event& event) override;  
+    void finishTask(const Event& origin_event); 
+    float ml_per_second_from_PWM(int pwm);      
+                                                
+    ~Pump() {                                   
+        if (task_handle != nullptr)             
+            vTaskDelete(task_handle);           
+        ledc_set_duty(LEDC_LOW_SPEED_MODE, pwm_channel, 0);    
+        ledc_update_duty(LEDC_LOW_SPEED_MODE, pwm_channel);    
+    }                                           
+                                                
+private:                                        
+    gpio_num_t     pwm_pin;                     
+    ledc_channel_t pwm_channel;                 
+    ledc_timer_t   pwm_timer;                   
+    int            pwm_frequency;               
+    int            pwm_resolution;              
+    int            min_pwm;                     
+    int            max_pwm;                     
+                                                
+    const Interpolation_Points* calib_data;     
+    int            calib_count;                 
+                                                
+    EventQueue*    out_queue;                   
+    bool           is_running;                  
+    TaskHandle_t   task_handle;                 
+    int            pwm_current;                 
+};

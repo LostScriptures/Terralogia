@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <cmath>
 #include <chrono>
+#include "TS_PriorityQueue.h"
 
 enum DeviceType {
     LIGHT,
@@ -18,7 +19,8 @@ enum Command {
     SET,
     GET,
     TOGGLE,
-    COLOR
+    COLOR,
+    SPEED
 };
 
 namespace COLORS{
@@ -95,3 +97,4 @@ public:
         return EventWrapper{priority, e};
     };
 };
+using EventQueue = RTOSPriorityQueue<EventWrapper, 3, 10>;
