@@ -46,6 +46,8 @@ namespace COLORS{
     constexpr Color RED{255,0,0};
     constexpr Color GREEN{0,255,0};
     constexpr Color BLUE{0,0,255};
+    constexpr Color WHITE{255,255,255};
+    constexpr Color BLACK{0,0,0};
 
     uint32_t toInt(const Color& color, uint8_t led = 0);
     
